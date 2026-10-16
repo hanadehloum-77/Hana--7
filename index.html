@@ -1,0 +1,571 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Hana's Secret Royal Letter</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: #f8ead0;
+      font-family: "Cormorant Garamond", serif;
+      background:
+        linear-gradient(rgba(30, 5, 16, 0.72),
+                        rgba(30, 5, 16, 0.88)),
+        url("https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1600&q=80");
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
+
+    .page {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 25px;
+    }
+
+    .panel {
+      width: 100%;
+      max-width: 600px;
+      padding: 35px 25px;
+      text-align: center;
+      background: rgba(49, 12, 29, 0.91);
+      border: 1px solid #c9a45c;
+      outline: 1px solid rgba(201, 164, 92, 0.35);
+      outline-offset: 7px;
+      box-shadow: 0 0 45px rgba(0, 0, 0, 0.45);
+    }
+
+    h1 {
+      color: #e7c77e;
+      font-size: clamp(32px, 8vw, 48px);
+      margin: 8px 0 15px;
+      font-weight: 500;
+    }
+
+    h2 {
+      color: #e7c77e;
+      font-size: 27px;
+      font-weight: 500;
+    }
+
+    p {
+      font-size: 21px;
+      line-height: 1.6;
+    }
+
+    .signature {
+      font-family: "Great Vibes", cursive;
+      font-size: 38px;
+      color: #e7c77e;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .ornament {
+      color: #e7c77e;
+      font-size: 25px;
+      letter-spacing: 7px;
+    }
+
+    /* THE ROYAL ENVELOPE */
+
+    .envelope-area {
+      display: flex;
+      justify-content: center;
+      margin: 35px auto;
+      perspective: 900px;
+    }
+
+    .envelope {
+      position: relative;
+      width: 260px;
+      height: 170px;
+      cursor: pointer;
+      background: #e9d8b7;
+      border: 2px solid #c9a45c;
+      box-shadow: 0 12px 30px #17050c;
+      transition: transform 0.3s;
+    }
+
+    .envelope:hover {
+      transform: translateY(-5px);
+    }
+
+    .envelope::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        145deg,
+        transparent 49%,
+        #d3bc91 50%
+      );
+      clip-path: polygon(0 0, 100% 0, 50% 62%);
+      z-index: 2;
+    }
+
+    .flap {
+      position: absolute;
+      inset: 0;
+      background: #f4e8d1;
+      clip-path: polygon(0 0, 100% 0, 50% 58%);
+      transform-origin: top;
+      transition: transform 0.8s;
+      z-index: 4;
+    }
+
+    .envelope.open .flap {
+      transform: rotateX(180deg);
+    }
+
+    .envelope-label {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 22px;
+      z-index: 5;
+      color: #5a1932;
+      font-size: 20px;
+      font-style: italic;
+    }
+
+    .seal {
+      position: absolute;
+      left: 50%;
+      top: 55%;
+      transform: translate(-50%, -50%);
+      width: 53px;
+      height: 53px;
+      border-radius: 50%;
+      background: radial-gradient(
+        circle at 30% 25%,
+        #b85b65,
+        #6d1027 70%
+      );
+      border: 2px solid #d8b76c;
+      box-shadow: 0 3px 7px #44202a;
+      display: grid;
+      place-items: center;
+      color: #f0d99b;
+      font-size: 29px;
+      z-index: 6;
+    }
+
+    button {
+      border: 1px solid #d6b46b;
+      background: #6f1834;
+      color: #fff0d0;
+      padding: 12px 24px;
+      font-family: inherit;
+      font-size: 19px;
+      cursor: pointer;
+      margin: 8px;
+      transition: 0.25s;
+    }
+
+    button:hover {
+      background: #96304d;
+      transform: translateY(-2px);
+    }
+
+    .options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 25px 0;
+    }
+
+    .options button {
+      margin: 0;
+      min-height: 55px;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      padding: 13px;
+      margin: 9px 0;
+      background: #fff8ec;
+      color: #351020;
+      border: 1px solid #c9a45c;
+      font-family: inherit;
+      font-size: 18px;
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .small-note {
+      font-size: 15px;
+      color: #d7c5ac;
+    }
+
+    @media (max-width: 420px) {
+      .panel {
+        padding: 25px 16px;
+      }
+
+      .options {
+        grid-template-columns: 1fr;
+      }
+
+      .envelope {
+        width: 235px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <main class="page">
+
+    <!-- THE ENVELOPE -->
+    <section class="panel" id="envelopeScreen">
+      <div class="ornament">✦ ❦ ✦</div>
+
+      <h1>Hana's Secret Letter</h1>
+
+      <p>
+        A private letter awaits the worthy guest.
+        Dare you open it?
+      </p>
+
+      <div class="envelope-area">
+        <div class="envelope"
+             id="envelope"
+             role="button"
+             tabindex="0"
+             aria-label="Open Hana's sealed letter">
+
+          <div class="flap"></div>
+
+          <div class="envelope-label">
+            To a curious visitor...
+          </div>
+
+          <div class="seal">♕</div>
+        </div>
+      </div>
+
+      <p>Tap the royal seal to begin.</p>
+
+      <div class="ornament">❦</div>
+    </section>
+
+    <!-- THE REST OF THE PAGE WILL GO BELOW -->
+
+    <!-- WELCOME -->
+    <section class="panel hidden" id="welcomePanel">
+      <div class="ornament">✦ ❦ ✦</div>
+
+      <h1>Welcome, Dear Guest</h1>
+
+      <p>
+        Hello, I'm Hana.
+        Welcome to my little world, dear guest.
+        How may I be of service to you today?
+      </p>
+
+      <p>
+        Before we proceed, I must know
+        whether you truly know Her Majesty.
+      </p>
+
+      <div class="signature">Hana</div>
+
+      <button onclick="startQuiz()">
+        Begin the Royal Questions
+      </button>
+    </section>
+
+    <!-- QUIZ -->
+    <section class="panel hidden" id="quizPanel">
+      <div class="ornament">❦ ✦ ❦</div>
+
+      <p id="progress">Question 1 of 4</p>
+
+      <h2 id="questionText"></h2>
+
+      <div class="options" id="options"></div>
+
+      <p id="feedback"></p>
+    </section>
+
+    <!-- ACCESS DENIED -->
+    <section class="panel hidden" id="deniedPanel">
+      <div class="ornament">♕</div>
+
+      <h1>Access Denied</h1>
+
+      <p>
+        Hmm… don't you have something more important
+        to do than keeping tabs on me?
+      </p>
+
+      <p>
+        This private correspondence is not for you.
+      </p>
+
+      <button onclick="returnToEnvelope()">
+        Return to the Beginning
+      </button>
+    </section>
+
+    <!-- SUCCESS -->
+    <section class="panel hidden" id="successPanel">
+      <div class="ornament">✦ ❦ ✦</div>
+
+      <h1>Welcome to My Inner Circle</h1>
+
+      <p>
+        Splendid! You have proven your knowledge
+        of Her Majesty.
+      </p>
+
+      <p>
+        You may now leave a private message
+        for Hana.
+      </p>
+
+      <form id="messageForm">
+        <input
+          type="text"
+          id="guestName"
+          placeholder="Your name"
+          required
+        >
+
+        <input
+          type="email"
+          id="guestEmail"
+          placeholder="Your email (optional)"
+        >
+
+        <textarea
+          id="guestMessage"
+          placeholder="Write your message to Hana..."
+          required
+        ></textarea>
+
+        <button type="submit">
+          Seal and Send the Letter
+        </button>
+      </form>
+
+      <p id="formFeedback" class="small-note"></p>
+
+      <div class="signature">With elegance, Hana</div>
+    </section>
+
+  </main>
+
+  <script>
+    // SHOW ONLY THE SELECTED SCREEN
+
+    function showPanel(panelId) {
+      const panels = [
+        "envelopeScreen",
+        "welcomePanel",
+        "quizPanel",
+        "deniedPanel",
+        "successPanel"
+      ];
+
+      panels.forEach(function(id) {
+        document.getElementById(id)
+          .classList.add("hidden");
+      });
+
+      document.getElementById(panelId)
+        .classList.remove("hidden");
+    }
+
+    // OPEN THE ENVELOPE
+
+    const envelope = document.getElementById("envelope");
+
+    function openEnvelope() {
+      envelope.classList.add("open");
+
+      setTimeout(function() {
+        showPanel("welcomePanel");
+      }, 700);
+    }
+
+    envelope.addEventListener("click", openEnvelope);
+
+    envelope.addEventListener("keydown", function(event) {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        openEnvelope();
+      }
+    });
+
+    // SECRET QUESTIONS
+
+    const questions = [
+      {
+        text: "I. Under Which Constellation Was Her Majesty Born?",
+        options: [
+          "Aries ♈ — The Ram",
+          "Leo ♌ — The Lion",
+          "Libra ♎ — The Scales",
+          "Taurus ♉ — The Bull"
+        ],
+        answer: "Leo ♌ — The Lion"
+      },
+
+      {
+        text: "II. Which Fragrance Bears Her Royal Signature?",
+        options: [
+          "Le Monde Sur Mesure",
+          "Chanel N°5",
+          "Dior Sauvage",
+          "Oud"
+        ],
+        answer: "Le Monde Sur Mesure"
+      },
+
+      {
+        text: "III. Which Hue Reigns Supreme in Her Kingdom?",
+        options: [
+          "Emerald Green",
+          "Royal Blue",
+          "Burgundy",
+          "Rose Gold"
+        ],
+        answer: "Royal Blue"
+      },
+
+      {
+        text: "IV. Which Precious Gem Has Captured Her Heart?",
+        options: [
+          "Blue Diamond",
+          "Pink Diamond",
+          "Musgravite",
+          "Black Opal"
+        ],
+        answer: "Blue Diamond"
+      }
+    ];
+
+    let currentQuestion = 0;
+
+    function startQuiz() {
+      currentQuestion = 0;
+      showPanel("quizPanel");
+      displayQuestion();
+    }
+
+    function displayQuestion() {
+      const question = questions[currentQuestion];
+
+      document.getElementById("progress").textContent =
+        "Question " + (currentQuestion + 1) +
+        " of " + questions.length;
+
+      document.getElementById("questionText").textContent =
+        question.text;
+
+      document.getElementById("feedback").textContent = "";
+
+      const optionsContainer =
+        document.getElementById("options");
+
+      optionsContainer.innerHTML = "";
+
+      question.options.forEach(function(option) {
+        const button = document.createElement("button");
+
+        button.textContent = option;
+
+        button.addEventListener("click", function() {
+          checkAnswer(option);
+        });
+
+        optionsContainer.appendChild(button);
+      });
+    }
+
+    function checkAnswer(selectedAnswer) {
+      if (selectedAnswer !== questions[currentQuestion].answer) {
+        showPanel("deniedPanel");
+        return;
+      }
+
+      currentQuestion++;
+
+      if (currentQuestion < questions.length) {
+        displayQuestion();
+      } else {
+        showPanel("successPanel");
+      }
+    }
+
+    // RETURN TO THE BEGINNING
+
+    function returnToEnvelope() {
+      currentQuestion = 0;
+      envelope.classList.remove("open");
+      showPanel("envelopeScreen");
+    }
+
+    // SEND A MESSAGE BY EMAIL
+
+    document.getElementById("messageForm")
+      .addEventListener("submit", function(event) {
+        event.preventDefault();
+
+        const name =
+          document.getElementById("guestName").value.trim();
+
+        const email =
+          document.getElementById("guestEmail").value.trim();
+
+        const message =
+          document.getElementById("guestMessage").value.trim();
+
+        const recipient = "YOUR_EMAIL@example.com";
+
+        if (recipient === "YOUR_EMAIL@example.com") {
+          document.getElementById("formFeedback").textContent =
+            "Please add your email address in the code first.";
+          return;
+        }
+
+        const subject = encodeURIComponent(
+          "A Royal Letter from " + name
+        );
+
+        const body = encodeURIComponent(
+          "From: " + name +
+          "\nEmail: " + (email || "Not provided") +
+          "\n\nMessage:\n" + message
+        );
+
+        window.location.href =
+          "mailto:" + recipient +
+          "?subject=" + subject +
+          "&body=" + body;
+      });
+  </script>
+
+</body>
+</html>
